@@ -4,9 +4,15 @@ import { v4 as uuid } from 'uuid';
 import type {Tree} from '../types/treeTypes'
 import { getNextNameNumber } from '../utils/trees'
 import { getTodaysDate } from '../utils/date';
+import { browser } from '$app/environment';
+import { getLocalStorage,setLocalStorage } from '../utils/localStorage';
 
 function TreesStore() {
     const { subscribe, update, set } = writable<Tree[]>([])
+
+    if (browser) {
+        set(getLocalStorage('trees',[]))
+    }
     function createTree() {
         let id:string=''
         update((trees) => {
@@ -18,7 +24,7 @@ function TreesStore() {
             const createdDate=todaysDate
 
             trees.push({ id, name, updatedDate, createdDate, root: null })
-            console.log(trees)
+           setLocalStorage('trees',trees)
             return trees
         })
         goto(`/${id}`)
