@@ -2,9 +2,9 @@
   import "../app.css";
     import 'iconify-icon'
 	import Header from "../components/header.svelte"
-	import { setTrees } from "../contexts/treeContet";
+	import { setTrees } from "../contexts/treeContext";
 
-  setTrees()
+setTrees()
 </script>
 <Header/>
 <slot />
