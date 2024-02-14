@@ -10,3 +10,5 @@ export type Node = {
     label: string
     children: Node[]
 }
+
+export type TreeFilters ='created'|'last opened'|'last updated'|'a-z'

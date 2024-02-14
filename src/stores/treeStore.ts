@@ -23,7 +23,7 @@ function TreesStore() {
             const updatedDate = todaysDate
             const createdDate=todaysDate
 
-            trees.push({ id, name, updatedDate, createdDate, root: null })
+            trees.unshift({ id, name, updatedDate, createdDate, root: null })
            setLocalStorage('trees',trees)
             return trees
         })
