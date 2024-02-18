@@ -3,6 +3,7 @@ export type Tree = {
     name: string
     createdDate: number
     updatedDate: number
+    openedDate: number
     root:Node| null
 }
 

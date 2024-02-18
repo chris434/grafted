@@ -1,1 +1,1 @@
-export const TREE_FILTERS=['created','A-Z']
+export const TREE_FILTERS=['created','A-Z','opened']

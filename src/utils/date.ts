@@ -4,7 +4,7 @@
 export function getTodaysDate() {
     return Date.now()
 }
-function getFullDate(date?: number) {
+export function getFullDate(date?: number) {
     if(date)return new Date(date)
     return new Date()
 }

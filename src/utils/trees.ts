@@ -1,4 +1,5 @@
 import type { Tree } from "../types/treeTypes";
+import {getFullDate} from './date'
 
 export function getNextNameNumber(trees: Tree[]) {
     if (!trees.length) return 1
@@ -42,7 +43,13 @@ switch (filter) {
     newTrees= trees.toSorted((a,b)=>{
                 return a.name.localeCompare(b.name)
             })
-break
+        break
+case'opened':{
+        newTrees = trees.toSorted((a, b) => {
+        return b.openedDate-a.openedDate
+    })
+    break
+}
 case'created':{
     newTrees=trees
     break

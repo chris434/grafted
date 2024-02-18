@@ -24,15 +24,16 @@ return DATE_CATEGORYs[key]
 <main class="h-[calc(100%-72px)] overflow-scroll">
 <TreeFilter bind:filterValue={filterValue}/>
 <ul  class="p-5">
-	{#each sortTrees(filterValue,$trees) as {id,name,createdDate},i}
-	{#if selectDateCategory('today',createdDate,i)}
+	{#each sortTrees(filterValue,$trees) as {id,name,createdDate,openedDate},i}
+    {@const date= filterValue==='opened'?openedDate:createdDate}
+	{#if selectDateCategory('today',date,i)}
 	<div class="text-xl">Today</div>
-	{:else if selectDateCategory('yesterday',createdDate,i)}
+	{:else if selectDateCategory('yesterday',date,i)}
 	<div class="text-xl">Yesterday</div>
-	{:else if selectDateCategory('earlier',createdDate,i)} 
+	{:else if selectDateCategory('earlier',date,i)} 
 	<div class="text-xl">Earlier</div>
 	{/if}
-    <TreeBar {id} {name} date={createdDate} filter={filterValue==='A-Z'?'created':filterValue}/>
+    <TreeBar {id} {name} {date}filter={filterValue==='A-Z'?'created':filterValue}/>
 	<hr class='border-1 border-black'/>
 	{/each}
 </ul>
