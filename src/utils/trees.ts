@@ -1,7 +1,7 @@
 import type { Tree } from "../types/treeTypes";
 
 export function getNextNameNumber(trees: Tree[]) {
-    if(!trees.length)return 1
+    if (!trees.length) return 1
 
 const filteredTreesByName= trees.filter(tree=> {
     const named = tree.name.match(/untitled_\d+/)
@@ -33,4 +33,20 @@ const filteredTreesByName= trees.filter(tree=> {
     }
     if (!nameNumber) nameNumber = parseInt(orderedTreesByName[orderedTreesByName.length - 1].name.split('_')[1]) 
     return nameNumber
+}
+
+export function sortTrees(filter:string,trees:Tree[]){
+    let newTrees:Tree[] =[]
+switch (filter) {
+    case 'A-Z':
+    newTrees= trees.toSorted((a,b)=>{
+                return a.name.localeCompare(b.name)
+            })
+break
+case'created':{
+    newTrees=trees
+    break
+}
+}
+return newTrees
 }

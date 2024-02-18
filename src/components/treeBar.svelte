@@ -3,11 +3,10 @@
 	import IconWithText from "./iconWithText.svelte";
     import type {ExtendedMouseEvent}from '../types/eventTypes'
 	import { FormatData } from "../utils/date";
-	import type { TreeFilters } from "../types/treeTypes";
 
     export let name:string
     export let date:number
-    export let filter:TreeFilters
+    export let filter:string
     export let id:String
     let disableLink:boolean
 

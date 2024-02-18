@@ -4,6 +4,7 @@
 	import TreeNameView from "../views/treeNameView.svelte";
 
 	const {createTree}=getTrees()
+
 </script>
 <Fab click={createTree} classes='bottom-10 left-10'>create new tree</Fab>
-<TreeNameView/>
+<TreeNameView />
