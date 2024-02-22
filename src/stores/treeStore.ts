@@ -24,13 +24,22 @@ function TreesStore() {
             const createdDate = todaysDate
             const openedDate= todaysDate
 
-            trees.unshift({ id, name, updatedDate, createdDate,openedDate, root: null })
+            trees.unshift({ id, name, updatedDate, createdDate, openedDate, root: null })
             console.log(trees)
            setLocalStorage('trees',trees)
             return trees
         })
         goto(`/${id}`)
     }
+      function createNode(label: string,treeId:string) {
+     update(trees => {
+            return trees.map(tree => {
+                if (tree.id === treeId) return { ...tree, root: { label, children: [] } }
+                return tree
+            }) 
+            
+        })
+}
     function updateDate(dateField: string, treeId: string) {
           const todaysDate = getTodaysDate()
         update(trees => {
@@ -40,9 +49,13 @@ function TreesStore() {
             }) 
             
         })
+       
     }
-    return { subscribe, update, set,createTree,updateDate}
+    return { subscribe, update, set, createTree, updateDate,createNode }
+   
 }
+
+
 export type TreeStoreType = ReturnType<typeof TreesStore>
 
 

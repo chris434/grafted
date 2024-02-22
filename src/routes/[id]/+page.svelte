@@ -11,5 +11,6 @@
 	$:$trees,(
 	browser&&setLocalStorage('trees',$trees)
 	)
+	
 </script>
 <TreeView/>
