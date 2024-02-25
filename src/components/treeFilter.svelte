@@ -12,10 +12,12 @@ import { getLocalStorage, setLocalStorage } from "../utils/localStorage";
    export let filterValue=''
    $:(filterValue= defaultFilterValue?defaultFilterValue:TREE_FILTERS[0])
 
+
+
 </script>
 
 <ToolBar>
-    <Select bind:value={filterValue}  componentLabel={true} label="filter" options={TREE_FILTERS}>
+    <Select bind:value={filterValue}  componentLabel={true} label="filter" options={[...TREE_FILTERS]}>
       <iconify-icon class="text-2xl" icon="mdi:filter-variant"></iconify-icon>
     </Select>
     <Button click={()=>setLocalStorage('filter',filterValue)}>set default</Button>

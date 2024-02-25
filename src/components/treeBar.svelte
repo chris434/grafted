@@ -14,14 +14,14 @@
          if(disableLink)e.preventDefault()
         disableLink = false
     }
-
+console.log(name)
 </script>
 
 <li>
     <a on:click={linkHandler} href="/{id}" class="w-full p-1 pl-5 pr-5 flex relative hover:text-white items-center rounded-3xl gap-3 hover:bg-green-400">
     <div class="w-full flex justify-between flex-col gap-4 sm:flex-row">
      <IconWithText text={name} icon='format-text'/>
-    <IconWithText text="{filter}: {FormatData(date)}" icon='date-range'/>
+    <IconWithText text="{filter}: {date&&FormatData(date)}" icon='date-range'/>
     </div>
    <IconButton className="absolute sm:static top-0 right-0" on:click={() => disableLink=true }   hover="hover:bg-green-300" icon="dots-vertical"/>
     </a>

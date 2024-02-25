@@ -20,11 +20,10 @@ function TreesStore() {
             const nameNumber = getNextNameNumber(trees)
             const name = `untitled_${nameNumber}`
               const todaysDate = getTodaysDate()
-            const updatedDate = todaysDate
             const createdDate = todaysDate
             const openedDate= todaysDate
 
-            trees.unshift({ id, name, updatedDate, createdDate, openedDate, root: null })
+            trees.unshift({ id, name, createdDate, openedDate, root: null })
             console.log(trees)
            setLocalStorage('trees',trees)
             return trees
@@ -41,7 +40,8 @@ function TreesStore() {
         })
 }
     function updateDate(dateField: string, treeId: string) {
-          const todaysDate = getTodaysDate()
+        const todaysDate = getTodaysDate()
+        console.log('kj')
         update(trees => {
             return trees.map(tree => {
                 if (tree.id === treeId) return { ...tree, [dateField]: todaysDate }

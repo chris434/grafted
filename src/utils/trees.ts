@@ -1,5 +1,4 @@
-import type { Tree } from "../types/treeTypes";
-import {getFullDate} from './date'
+import type { Tree, TreeWithUpdatedDateNumber } from "../types/treeTypes";
 
 export function getNextNameNumber(trees: Tree[]) {
     if (!trees.length) return 1
@@ -49,6 +48,14 @@ case'opened':{
         return b.openedDate-a.openedDate
     })
     break
+    }
+    case 'updated': {
+        const filteredTrees = trees.filter(function (tree): tree is TreeWithUpdatedDateNumber {
+         return typeof tree.updatedDate === 'number'
+        })
+        newTrees= filteredTrees.toSorted((a, b) => {
+        return b.updatedDate-a.updatedDate
+    })
 }
 case'created':{
     newTrees=trees

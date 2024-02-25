@@ -14,6 +14,7 @@ const {createNode}=getTrees()
     if(!value) return errorMessage='key is required'
     errorMessage=''
     createNode(value,id)
+    addToggle=false
   }
 
   function toggleValue(){

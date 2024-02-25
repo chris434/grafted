@@ -1,5 +1,5 @@
-<script lang="ts" >
-    export let options:string[]
+<script lang="ts" generics="T" >
+    export let options:T[]
     export let value:string
     export let label:string
     export let componentLabel:boolean=false
