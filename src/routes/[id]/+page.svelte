@@ -22,4 +22,7 @@
 	})
 	
 </script>
+
+{#if $trees}
 <TreeView/>
+{/if}

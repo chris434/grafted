@@ -13,6 +13,10 @@ function TreesStore() {
     if (browser) {
         set(getLocalStorage('trees',[]))
     }
+    let trees: Tree[] = []
+    subscribe((currentTrees) => {
+        trees=currentTrees
+    })
     function createTree() {
         let id:string=''
         update((trees) => {
@@ -36,7 +40,6 @@ function TreesStore() {
                 if (tree.id === treeId) return { ...tree, root: { label, children: [] } }
                 return tree
             }) 
-            
         })
 }
     function updateDate(dateField: string, treeId: string) {
@@ -51,7 +54,15 @@ function TreesStore() {
         })
        
     }
-    return { subscribe, update, set, createTree, updateDate,createNode }
+    function updateName(name: string, i: number) {
+        if (trees[i].name === name) return false
+        
+        const hasName = trees.some(tree => tree.name === name);
+        if (hasName) return true
+        trees[i].name = name
+        set(trees)
+    }
+    return { subscribe, update, set, createTree, updateDate,createNode,updateName }
    
 }
 
