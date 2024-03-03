@@ -7,5 +7,5 @@
 </script>
 
 <button  on:click={()=>dispatch('click')} class=" {className} text-2xl p-3 {hover} rounded-full flex items-center" >
-    <iconify-icon class="text-2xl" icon="mdi:{icon}"></iconify-icon>
+    <iconify-icon  class="text-2xl" icon="mdi:{icon}"></iconify-icon>
 </button>

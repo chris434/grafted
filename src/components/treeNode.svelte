@@ -2,7 +2,7 @@
 	import type {Node } from "../types/treeTypes";
 
     export let node:Node
-    let selected=false
+   export let selected=false
     const ICONS={'false':'chevron-up','true':'chevron-down'} as const
 
     function selectNode(){
