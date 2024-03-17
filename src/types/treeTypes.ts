@@ -11,7 +11,9 @@ export type TreeWithUpdatedDateNumber = Omit<Tree,'updatedDate'>&{updatedDate:nu
 export type TreeDateFields= keyof Pick<Tree,'createdDate'|'openedDate'|'updatedDate'>
 
 export type Node = {
+    id:string;
     label: string
+    open:boolean
     children: Node[]
 }
 

@@ -1,14 +1,17 @@
 <script lang="ts">
-import {page} from '$app/stores';
 	import { getTrees } from "../contexts/treeContext";
 import IconButton from "./iconButton.svelte";
 	import TextField from "./textField.svelte";
   import type {Node} from '../types/treeTypes'
+	import { getTreeIndex } from '../contexts/treeIndexContext';
+	import { getSelectedNode } from "../contexts/selectedNodeContext";
   export let root:Node|null
-  export let selected:boolean
+  let selected=getSelectedNode()
+  const {setSelected}=selected
   let nodesToDelete=[]
 const {createNode}=getTrees()
-const {id}=$page.params
+const treeIndex=getTreeIndex()
+
     let addToggle =false
     let errorMessage=''
     let value =''
@@ -16,11 +19,12 @@ const {id}=$page.params
     function submit() {
     if(!value) return errorMessage='key is required'
     errorMessage=''
-    createNode(value,id)
+   const id= createNode(value,treeIndex,$selected)
+   setSelected(id)
     addToggle=false
   }
 
-  $:if(!selected) addToggle=false
+  $:if(!$selected) addToggle=false
 
   function toggleValue(){
      addToggle=!addToggle
@@ -31,10 +35,10 @@ const {id}=$page.params
 </script>
 <section class="bg-gray-100 p-2 w-full shadow-md">
   <div class="flex items-center gap-3 h-[48px]">
-    {#if !root||selected}
+    {#if !root||$selected}
       <IconButton  on:click={toggleValue} icon="add"/>
     {/if}
-    {#if selected}
+    {#if $selected}
     <IconButton icon="edit"/>
     {/if}
     {#if nodesToDelete.length}
