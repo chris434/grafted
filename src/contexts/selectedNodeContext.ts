@@ -1,8 +1,8 @@
 import { getContext, setContext } from "svelte";
-import {selectedNode,type SelectedNode} from "../stores/selectedNodeStore";
+import {selectedNode,type SelectedNodeReturn} from "../stores/selectedNodeStore";
 
 export function getSelectedNode() {
-    return getContext('selectedNode')as SelectedNode
+    return getContext('selectedNode')as SelectedNodeReturn
 }
 
 export function setSelectedNodes() {

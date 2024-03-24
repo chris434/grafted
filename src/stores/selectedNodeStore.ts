@@ -1,15 +1,16 @@
 import { writable } from "svelte/store";
+import  type  {Node} from '../types/treeTypes'
 
 function createStore() {
-    const { set, subscribe } = writable('') 
+    const { set, subscribe } = writable<Node|null>(null) 
     
-    function setSelected(id: string) {
-        set(id)
+    function setSelected(node:Node) {
+        set(node)
     }
 
     return {subscribe,setSelected}
 }
-export type SelectedNode = ReturnType<typeof createStore>
+export type SelectedNodeReturn = ReturnType<typeof createStore>
 export const selectedNode=createStore()
 
 

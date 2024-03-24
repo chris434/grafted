@@ -2,26 +2,24 @@
 	import { getSelectedNode } from "../contexts/selectedNodeContext";
 	import { getTrees } from "../contexts/treeContext";
 	import { getTreeIndex } from "../contexts/treeIndexContext";
-	import type {Node } from "../types/treeTypes";
-    import type {ExtendedMouseEvent } from "../types/eventTypes";
+	import type {Node} from "../types/treeTypes";
 	import IconButton from "./iconButton.svelte";
 
     export let node:Node
-   export let selected=false
    export let offset:number
    
     const ICONS={'false':'chevron-up','true':'chevron-down'} as const
     const treeIndex=getTreeIndex()
     const {toggleNode}=getTrees()
-    const selectedId=getSelectedNode()
-    const {setSelected}= selectedId
+    const selectedNode=getSelectedNode()
+    const {setSelected}= selectedNode
     let toggleClicked=false
 
-    $:isSelected=$selectedId===node.id
+    $:isSelected=$selectedNode?.id===node.id
 
     function updateNode(){
         toggleNode(node.id,treeIndex)
-        setSelected(node.id)
+      setSelected(node)
     }
 
     function selectHandler(){
@@ -29,7 +27,7 @@
 console.log(2)
     if(!toggleClicked){
         if(node.open &&!isSelected ){
-        setSelected(node.id)
+         setSelected(node)
         }else{
         updateNode()
         }

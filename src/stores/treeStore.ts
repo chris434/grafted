@@ -2,56 +2,77 @@ import { writable } from 'svelte/store'
 import { goto } from '$app/navigation';
 import { v4 as uuid } from 'uuid';
 import type {Tree,Node} from '../types/treeTypes'
-import { findNode, getNextChildId, getNextNameNumber } from '../utils/trees'
+import {type UpdateCbReturn,  findNode, getNextChildId, getNextNameNumber } from '../utils/trees'
 import { getTodaysDate } from '../utils/date';
 import { browser } from '$app/environment';
 import { getLocalStorage,setLocalStorage } from '../utils/localStorage';
+import { findDoubleValue } from '../utils/array';
+
+type NodeHandlerOptions = {
+    returnNode?: Node|null
+    passParentNode?: boolean
+}
 
 function TreesStore() {
     const { subscribe, update, set } = writable<Tree[]>([])
 
     if (browser) {
-        set(getLocalStorage('trees',[]))
+        set(getLocalStorage('trees', []))
     }
     let trees: Tree[] = []
     subscribe((currentTrees) => {
-        trees=currentTrees
+        trees = currentTrees
     })
     function createTree() {
-        let id:string=''
+        let id: string = ''
         update((trees) => {
-            id=uuid()
+            id = uuid()
             const nameNumber = getNextNameNumber(trees)
             const name = `untitled_${nameNumber}`
-              const todaysDate = getTodaysDate()
+            const todaysDate = getTodaysDate()
             const createdDate = todaysDate
-            const openedDate= todaysDate
+            const openedDate = todaysDate
 
             trees.unshift({ id, name, createdDate, openedDate, root: null })
             console.log(trees)
-           setLocalStorage('trees',trees)
+            setLocalStorage('trees', trees)
             return trees
         })
         goto(`/${id}`)
     }
-    function createNode(label: string, treeIndex: number, nodeId: string ) {
-        let returnId = ''
+    function createNode(label: string, treeIndex: number, nodeId: string) {
+        let returnNode: Node | null = null
         let root = trees[treeIndex]?.root
-        let newRoot: Node | null = null
+        let error=false
 
-        if (!root)  newRoot = { id: 'root', label, open: true, children: [] }
-        nodeHandler(nodeId, treeIndex, (node) => {
-              const { children } = node
-               returnId=getNextChildId(node,nodeId)
-            return { ...node, open: true, children: [...children, { id:returnId, label, open: true, children: [] }] }
-        },newRoot)
-        return returnId
+        if (!root) returnNode = { id: 'root', label, open: true, children: [] }
+        nodeHandler(nodeId, treeIndex, (node,parentNode) => {
+            const { children } = node
+            const id = getNextChildId(node, nodeId)
+            console.log(parentNode)
+             error =  findDoubleValue(node.children, 'label', label) 
+            console.log(error )
+            returnNode = { id, label, open: true, children: [] }
+            return {node:{ ...node, open: true, children: [...children, returnNode] },error}
+        },{returnNode})
+        return {node: returnNode,error }
     }
-    function toggleNode(nodeId: string,treeIndex:number) {
+    function toggleNode(nodeId: string, treeIndex: number) {
         nodeHandler(nodeId, treeIndex, (node) => {
-             const {open}=node
-            return {...node,open:!open}
+            const { open } = node
+            return { node: { ...node, open: !open } }
         })
+    }
+    function editLabel(label: string, treeIndex: number, nodeId: string) {
+        let error = false
+        let newNode:Node|null=null
+        nodeHandler(nodeId, treeIndex, (node,parentNode) => {
+            console.log(parentNode)
+            error =parentNode? findDoubleValue(parentNode.children, 'label', label):false
+            newNode={...node, label}
+            return {node:newNode,error}
+        },{passParentNode:true})
+        return {error,node:newNode}
     }
 
     function updateDate(dateField: string, treeId: string) {
@@ -80,19 +101,23 @@ function TreesStore() {
     })
        
     }
-     function nodeHandler(nodeId:string,treeIndex:number,updateCb:(node:Node) => Node,newRoot:Node|null=null) {
-        let root = trees[treeIndex]?.root
+     function nodeHandler(nodeId:string,treeIndex:number,updateCb:(node:Node,parentNode:Node|null) =>UpdateCbReturn,options?:NodeHandlerOptions) {
+         let root = trees[treeIndex]?.root
+         const returnNode = options?.returnNode
+         const passParentNode = options?.passParentNode||false
+         let newRoot= returnNode
+         
         
-        if (root && nodeId) {
-         findNode(root, nodeId, (node) => {
-            return updateCb(node)
+        if (root && nodeId&& !returnNode) {
+            findNode(root, nodeId, (node,parentNode) => {
+             return  updateCb(node,parentNode||null)
             }, (node) => {
                 newRoot = node
-            })
+            },passParentNode)
          }
-         if (newRoot) updateTrees(treeIndex, newRoot)
+        if(newRoot)updateTrees(treeIndex, newRoot)
     }
-    return { subscribe, update, set, createTree, updateDate,createNode,updateName,toggleNode }
+    return { subscribe, update, set, createTree, updateDate,createNode,updateName,editLabel,toggleNode }
    
 }
 

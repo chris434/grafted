@@ -19,6 +19,7 @@
 
 
  function focus(select:HTMLInputElement){
+   
         if(selected) select.focus()
 
     }

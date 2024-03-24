@@ -8,7 +8,6 @@
 	const trees=getTrees()
 	const {updateName}=trees
 	const treeIndex=getTreeIndex()
-	let selected=false
 
 	$: tree=$trees[treeIndex]
 	$: value =tree?.name
@@ -31,7 +30,7 @@
  <main class="lg:w-6/12 md:w-8/12 sm:w-9/12 w-full  border-2 border-green-500 m-5">
 <ActionBar {root}/>
 {#if root}
-<TreeNode bind:selected node={root} offset={0}/>
+<TreeNode node={root} offset={0}/>
 {/if}
 </main>
 </div>

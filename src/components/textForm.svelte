@@ -54,5 +54,5 @@ return isNull
 
 </script>
 <form on:submit|preventDefault={submit}>
-    <TextField bind:blurInput {blurSelected} bind:errorMessage {blur} {placeholder} bind:value/>
+    <TextField  bind:blurInput {blurSelected}  bind:errorMessage {blur} {placeholder} bind:value/>
 </form>

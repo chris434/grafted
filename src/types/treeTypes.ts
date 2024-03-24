@@ -17,4 +17,9 @@ export type Node = {
     children: Node[]
 }
 
+export type SelectedNode = {
+    node:Node
+    parentId:string
+}
+
 export type TreeFilters ='created'|'last opened'|'last updated'|'a-z'

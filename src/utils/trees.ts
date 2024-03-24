@@ -1,16 +1,8 @@
 
 import type { Tree, Node, TreeWithUpdatedDateNumber } from "../types/treeTypes";
-import {createTreesStore} from '../stores/treeStore'
 
 type NodesArray = { linkIndex: number, node: Node }
-
-
-// function returnTrees(treeIndex:number,newRoot:Node) {
-//     update(trees => {
-//         trees[treeIndex] = { ...trees[treeIndex], root: newRoot } 
-//         return trees
-//     })
-// }
+export type UpdateCbReturn={error?:boolean,node:Node}
 
 
 export function getNextNameNumber(trees: Tree[]) {
@@ -77,32 +69,37 @@ case'created':{
 }
 return newTrees
 }
-export function findNode(startNode: Node, targetId: string, updateCb: (node:Node) => Node,returnCb:(node:Node)=>void) {
+export function findNode(startNode: Node,targetId: string, updateCb: (node:Node,parentNode:Node|null) => UpdateCbReturn,returnCb:(node:Node)=>void,passParentNode:boolean) {
     const ids = targetId.split('_')
-    function nextNode(node: Node, nodesArray: NodesArray[], currentId: string,parentId: string,idIndex: number) {
-        if ( parentId === targetId) {
-            const newNode = updateCb(node)
-          return  mapRoot(newNode)
+    function nextNode(node: Node,parentNode:Node|null, nodesArray: NodesArray[], currentId: string,parentId: string,idIndex: number) {
+        console.log(parentNode)
+        if (parentId === targetId) {
+            const { node: newNode, error } = updateCb(node,parentNode)
+        return  mapRoot(newNode,error)
         }
          
         const { children } = node
       
     for (let i = 0; i <children.length; i++) {
         const { id } = children[i]
-        const nextParentId = !currentId||ids.length===1? '' : `${currentId}_`
-        const nextId = `${nextParentId}${ids[idIndex]}`
+        const nextParentId = !currentId || ids.length === 1 ? '' : `${currentId}_`
+        const parentId=ids[idIndex]
+        const nextId = `${nextParentId}${parentId}`
         const subTargetId = targetId.slice(0, nextId.length)
+        const parentNode=`${parentId}_${ids[idIndex+1]}`===targetId||!currentId&&passParentNode?node:null
       
-        if (id ===subTargetId) {
+        if (id === subTargetId) {
             nodesArray = [...nodesArray, { linkIndex: i, node }]
-         return   nextNode(children[i], nodesArray, nextId, id, idIndex++)
+         return   nextNode(children[i],parentNode, nodesArray, nextId, id, idIndex++)
            
           
         }
             
         
     }
-        function mapRoot(newNode: Node) {
+        function mapRoot(newNode: Node, error: boolean | undefined) {
+            console.log(error)
+            if(error) return
             let newRoot=newNode
             if (!nodesArray.length) return returnCb(newNode)
             if (nodesArray.length === 1) {
@@ -120,7 +117,7 @@ export function findNode(startNode: Node, targetId: string, updateCb: (node:Node
     
     }
     
-    nextNode(startNode, [],'','root',0)
+    nextNode(startNode,null, [],'','root',0)
 }
 
 function getChar(str: string) {
